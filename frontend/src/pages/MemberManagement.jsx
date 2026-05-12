@@ -101,7 +101,7 @@ const MemberManagement = () => {
                 {m.issues && m.issues.filter(i => !i.returnDate).length > 0 ? (
                   m.issues.filter(i => !i.returnDate).map(i => (
                     <Badge bg="info" key={i.issueId} className="me-1" style={{fontSize: '0.7rem'}}>
-                      {i.book.title}
+                      {i.book?.title || 'Unknown'}
                     </Badge>
                   ))
                 ) : (
