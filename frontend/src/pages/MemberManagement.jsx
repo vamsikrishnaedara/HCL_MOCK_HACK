@@ -21,10 +21,7 @@ const MemberManagement = () => {
 
   const fetchMembers = async () => {
     try {
-      // Note: The PDF didn't specify a GET /members endpoint, but it's common.
-      // If it doesn't exist, we might need to adjust. 
-      // Assuming GET /members exists based on standard practices.
-      const response = await memberService.getMemberDetails('all'); // Placeholder logic
+      const response = await memberService.getAllMembers();
       setMembers(Array.isArray(response.data) ? response.data : []);
     } catch (err) {
       console.error('Error fetching members:', err);

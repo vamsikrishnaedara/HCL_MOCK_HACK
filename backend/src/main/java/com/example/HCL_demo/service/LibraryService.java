@@ -69,6 +69,10 @@ public class LibraryService {
         return memberRepository.save(member);
     }
 
+    public List<Member> getAllMembers() {
+        return memberRepository.findAll();
+    }
+
     public Optional<Member> getMemberDetails(Long memberId) {
         return memberRepository.findById(memberId);
     }
