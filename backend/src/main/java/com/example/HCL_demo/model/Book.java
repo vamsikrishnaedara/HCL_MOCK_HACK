@@ -19,4 +19,8 @@ public class Book {
     private String title;
     private String author;
     private Boolean available = true;
+
+    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER)
+    @com.fasterxml.jackson.annotation.JsonIgnoreProperties("book")
+    private java.util.List<IssueRecord> issues;
 }

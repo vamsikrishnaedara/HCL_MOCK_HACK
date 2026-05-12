@@ -87,6 +87,7 @@ const MemberManagement = () => {
             <th>ID</th>
             <th>Name</th>
             <th>Email</th>
+            <th>Books Issued</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -97,11 +98,22 @@ const MemberManagement = () => {
               <td>{m.name}</td>
               <td>{m.email}</td>
               <td>
+                {m.issues && m.issues.filter(i => !i.returnDate).length > 0 ? (
+                  m.issues.filter(i => !i.returnDate).map(i => (
+                    <Badge bg="info" key={i.issueId} className="me-1" style={{fontSize: '0.7rem'}}>
+                      {i.book.title}
+                    </Badge>
+                  ))
+                ) : (
+                  <span className="text-muted small">None</span>
+                )}
+              </td>
+              <td>
                 <Button size="sm" variant="outline-primary" onClick={() => openIssueModal(m)}>Issue Book</Button>
               </td>
             </tr>
           )) : (
-            <tr><td colSpan="4" className="text-center">No members found.</td></tr>
+            <tr><td colSpan="5" className="text-center">No members found.</td></tr>
           )}
         </tbody>
       </Table>
