@@ -3,9 +3,11 @@ package com.example.HCL_demo.service;
 import com.example.HCL_demo.model.Book;
 import com.example.HCL_demo.model.IssueRecord;
 import com.example.HCL_demo.model.Member;
+import com.example.HCL_demo.model.User;
 import com.example.HCL_demo.repository.BookRepository;
 import com.example.HCL_demo.repository.IssueRecordRepository;
 import com.example.HCL_demo.repository.MemberRepository;
+import com.example.HCL_demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +28,18 @@ public class LibraryService {
     @Autowired
     private IssueRecordRepository issueRecordRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+
+    // User Management
+    public User createUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
+    }
+
     // Book Management
     public Book addBook(Book book) {
         return bookRepository.save(book);
@@ -44,7 +58,14 @@ public class LibraryService {
     }
 
     // Member Management
+    @Transactional
     public Member registerMember(Member member) {
+        if (member.getUser() != null) {
+            User user = member.getUser();
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setRole(com.example.HCL_demo.model.Role.MEMBER);
+            // No need to explicitly save user if cascade is ALL, but let's be safe or just let cascade handle it
+        }
         return memberRepository.save(member);
     }
 
