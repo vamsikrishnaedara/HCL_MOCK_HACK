@@ -32,9 +32,10 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/books").hasRole("LIBRARIAN")
-                .requestMatchers("/members/**").hasRole("LIBRARIAN")
+                .requestMatchers(HttpMethod.GET, "/members/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/members").hasRole("LIBRARIAN")
                 .requestMatchers("/issues/issue").hasRole("LIBRARIAN")
-                .requestMatchers("/issues/return/**").hasRole("LIBRARIAN")
+                .requestMatchers("/issues/return/**").permitAll()
                 .anyRequest().authenticated()
             )
             .headers(headers -> headers.frameOptions(frame -> frame.disable()))
