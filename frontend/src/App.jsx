@@ -6,18 +6,7 @@ import BookManagement from './pages/BookManagement';
 import MemberManagement from './pages/MemberManagement';
 import MemberDashboard from './pages/MemberDashboard';
 import BookCatalog from './pages/BookCatalog';
-
-const LibrarianDashboard = () => (
-  <div className="mt-4 p-5 bg-light rounded-3">
-    <h2>Librarian Administration</h2>
-    <p className="lead">Manage the library's inventory, register members, and oversee book transactions.</p>
-    <hr className="my-4" />
-    <div className="d-flex gap-3">
-      <Link to="/librarian/books" className="btn btn-primary btn-lg">Manage Books</Link>
-      <Link to="/librarian/members" className="btn btn-success btn-lg">Manage Members</Link>
-    </div>
-  </div>
-);
+import LibrarianDashboard from './pages/LibrarianDashboard';
 
 function App() {
   const [role, setRole] = useState('Librarian'); // Default role
@@ -28,35 +17,45 @@ function App() {
 
   return (
     <Router>
-      <Navbar bg="dark" variant="dark" expand="lg">
+      <Navbar variant="dark" expand="lg" sticky="top">
         <Container>
-          <Navbar.Brand as={Link} to="/">Library System</Navbar.Brand>
+          <Navbar.Brand as={Link} to="/" className="d-flex align-items-center">
+            <span className="me-2" style={{fontSize: '1.5rem'}}>🏛️</span>
+            UNIVERSITY LIBRARY
+          </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
               {role === 'Librarian' ? (
                 <>
                   <Nav.Link as={Link} to="/librarian">Dashboard</Nav.Link>
-                  <Nav.Link as={Link} to="/librarian/books">Books</Nav.Link>
-                  <Nav.Link as={Link} to="/librarian/members">Members</Nav.Link>
+                  <Nav.Link as={Link} to="/librarian/books">Collection</Nav.Link>
+                  <Nav.Link as={Link} to="/librarian/members">Patrons</Nav.Link>
                 </>
               ) : (
                 <>
-                  <Nav.Link as={Link} to="/member">My Dashboard</Nav.Link>
-                  <Nav.Link as={Link} to="/member/catalog">Browse Books</Nav.Link>
+                  <Nav.Link as={Link} to="/member">My Portal</Nav.Link>
+                  <Nav.Link as={Link} to="/member/catalog">Search Catalog</Nav.Link>
                 </>
               )}
             </Nav>
             <Nav>
-              <Button variant="outline-info" onClick={toggleRole}>
-                Switch to {role === 'Librarian' ? 'Member' : 'Librarian'} View
+              <Button variant="outline-light" size="sm" onClick={toggleRole} className="px-3 rounded-pill border-opacity-50">
+                Switch to {role === 'Librarian' ? 'Member' : 'Librarian'} Portal
               </Button>
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
 
-      <Container>
+      <div className={role === 'Member' ? "hero-section" : "d-none"}>
+        <Container className="text-center">
+            <h1 className="display-3 mb-3">Academic Excellence Starts Here</h1>
+            <p className="lead fs-3">Access millions of resources, journals, and digital archives.</p>
+        </Container>
+      </div>
+
+      <Container className="pb-5">
         <Routes>
           <Route path="/" element={<Navigate to={role === 'Librarian' ? "/librarian" : "/member"} />} />
           

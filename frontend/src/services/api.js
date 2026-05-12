@@ -16,11 +16,13 @@ export const bookService = {
 };
 
 export const memberService = {
-  registerMember: (memberData) => api.post('/members', memberData),
+  getAllMembers: () => api.get('/members'),
+  registerMember: (memberData) => api.post('/members'),
   getMemberDetails: (memberId) => api.get(`/members/${memberId}`),
 };
 
 export const issueService = {
+  getAllIssues: () => api.get('/issues'),
   issueBook: (issueData) => api.post('/issues/issue', issueData),
   returnBook: (issueId) => api.put(`/issues/return/${issueId}`),
 };
