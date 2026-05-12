@@ -3,17 +3,41 @@ import { Card, Table, Button, Form, Row, Col, Alert, Badge } from 'react-bootstr
 import { memberService, issueService } from '../services/api';
 
 const MemberDashboard = () => {
-  const [memberId, setMemberId] = useState('');
+  const storedUser = JSON.parse(localStorage.getItem('user'));
+  const isInitiallyLoggedIn = storedUser?.role === 'MEMBER';
+
+  const [memberId, setMemberId] = useState(storedUser?.memberId || '');
   const [memberData, setMemberData] = useState(null);
   const [issuedBooks, setIssuedBooks] = useState([]);
   const [error, setError] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(isInitiallyLoggedIn);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (isLoggedIn && memberId) {
+      fetchMemberData(memberId);
+    }
+  }, [isLoggedIn, memberId]);
+
+  const fetchMemberData = async (id) => {
+    setLoading(true);
+    try {
+      const response = await memberService.getMemberDetails(id);
+      const issuesRes = await memberService.getMemberIssues(id);
+      setMemberData(response.data);
+      setIssuedBooks(issuesRes.data);
+    } catch (err) {
+      setError('Failed to load profile data.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setError('');
     try {
       const response = await memberService.getMemberDetails(memberId);
-      const issuesRes = await memberService.getMemberIssues(memberId);
       
       const memberUser = { 
         username: response.data.name, 
@@ -22,11 +46,8 @@ const MemberDashboard = () => {
       };
       localStorage.setItem('user', JSON.stringify(memberUser));
       
-      setMemberData(response.data);
-      setIssuedBooks(issuesRes.data);
       setIsLoggedIn(true);
-      setError('');
-      window.location.reload(); // Refresh to update Navbar
+      // Data will be fetched by useEffect
     } catch (err) {
       setError('Member not found. Please check your ID.');
     }
@@ -41,9 +62,7 @@ const MemberDashboard = () => {
   const handleReturn = async (issueId) => {
     try {
       await issueService.returnBook(issueId);
-      // Refresh data
-      const issuesRes = await memberService.getMemberIssues(memberId);
-      setIssuedBooks(issuesRes.data);
+      fetchMemberData(memberId);
     } catch (err) {
       setError('Failed to return book.');
     }
@@ -75,17 +94,21 @@ const MemberDashboard = () => {
     );
   }
 
+  if (loading && !memberData) {
+    return <div className="text-center mt-5"><h4>Loading your profile...</h4></div>;
+  }
+
   return (
     <div className="mt-4">
-      <h2>Welcome, {memberData.name}</h2>
+      <h2>Welcome, {memberData?.name || 'Member'}</h2>
       <Row className="mb-4">
         <Col md={4}>
           <Card>
             <Card.Body>
               <Card.Title>Profile Info</Card.Title>
               <Card.Text>
-                <strong>Email:</strong> {memberData.email}<br/>
-                <strong>Member ID:</strong> {memberData.memberId}
+                <strong>Email:</strong> {memberData?.email}<br/>
+                <strong>Member ID:</strong> {memberData?.memberId}
               </Card.Text>
             </Card.Body>
           </Card>
@@ -106,8 +129,8 @@ const MemberDashboard = () => {
           {issuedBooks && issuedBooks.length > 0 ? (
             issuedBooks.map(issue => (
               <tr key={issue.issueId}>
-                <td>{issue.book.title}</td>
-                <td>{new Date(issue.issueDate).toLocaleDateString()}</td>
+                <td>{issue.book?.title}</td>
+                <td>{issue.issueDate ? new Date(issue.issueDate).toLocaleDateString() : 'N/A'}</td>
                 <td>{issue.returnDate ? new Date(issue.returnDate).toLocaleDateString() : 'Not Returned'}</td>
                 <td>
                   {!issue.returnDate && (
@@ -121,7 +144,7 @@ const MemberDashboard = () => {
           )}
         </tbody>
       </Table>
-      <Button variant="secondary" onClick={handleLogout}>Logout</Button>
+      <Button variant="danger" onClick={handleLogout}>Logout</Button>
     </div>
   );
 };
