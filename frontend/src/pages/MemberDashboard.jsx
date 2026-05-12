@@ -14,13 +14,28 @@ const MemberDashboard = () => {
     try {
       const response = await memberService.getMemberDetails(memberId);
       const issuesRes = await memberService.getMemberIssues(memberId);
+      
+      const memberUser = { 
+        username: response.data.name, 
+        role: 'MEMBER', 
+        memberId: response.data.memberId 
+      };
+      localStorage.setItem('user', JSON.stringify(memberUser));
+      
       setMemberData(response.data);
       setIssuedBooks(issuesRes.data);
       setIsLoggedIn(true);
       setError('');
+      window.location.reload(); // Refresh to update Navbar
     } catch (err) {
       setError('Member not found. Please check your ID.');
     }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    setIsLoggedIn(false);
+    window.location.reload();
   };
 
   const handleReturn = async (issueId) => {
@@ -106,7 +121,7 @@ const MemberDashboard = () => {
           )}
         </tbody>
       </Table>
-      <Button variant="secondary" onClick={() => setIsLoggedIn(false)}>Logout</Button>
+      <Button variant="secondary" onClick={handleLogout}>Logout</Button>
     </div>
   );
 };
