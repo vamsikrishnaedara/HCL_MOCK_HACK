@@ -18,5 +18,5 @@ public class Book {
     private Long bookId;
     private String title;
     private String author;
-    private boolean available = true;
+    private Boolean available = true;
 }

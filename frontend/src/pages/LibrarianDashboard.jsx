@@ -22,13 +22,13 @@ const LibrarianDashboard = () => {
 
         // Assuming issues are filtered from books or there's an endpoint
         // For now, let's try to get all issues if endpoint exists, 
-        // otherwise count books where availability is false
+        // otherwise count books where available is false
         let issuesCount = 0;
         try {
             const issuesRes = await issueService.getAllIssues();
             issuesCount = issuesRes.data.length;
         } catch (e) {
-            issuesCount = booksRes.data.filter(b => !b.availability).length;
+            issuesCount = booksRes.data.filter(b => !b.available).length;
         }
 
         setStats({

@@ -78,6 +78,10 @@ public class LibraryService {
         return member.map(issueRecordRepository::findByMember).orElse(List.of());
     }
 
+    public List<IssueRecord> getAllIssues() {
+        return issueRecordRepository.findAll();
+    }
+
     // Issue Book
     @Transactional
     public IssueRecord issueBook(Long bookId, Long memberId) {
@@ -86,7 +90,7 @@ public class LibraryService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("Member not found"));
 
-        if (!book.isAvailable()) {
+        if (!book.getAvailable()) {
             throw new RuntimeException("Book is already issued");
         }
 

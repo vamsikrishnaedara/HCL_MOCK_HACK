@@ -5,6 +5,7 @@ import { memberService, issueService } from '../services/api';
 const MemberDashboard = () => {
   const [memberId, setMemberId] = useState('');
   const [memberData, setMemberData] = useState(null);
+  const [issuedBooks, setIssuedBooks] = useState([]);
   const [error, setError] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -12,7 +13,9 @@ const MemberDashboard = () => {
     e.preventDefault();
     try {
       const response = await memberService.getMemberDetails(memberId);
+      const issuesRes = await memberService.getMemberIssues(memberId);
       setMemberData(response.data);
+      setIssuedBooks(issuesRes.data);
       setIsLoggedIn(true);
       setError('');
     } catch (err) {
@@ -24,8 +27,8 @@ const MemberDashboard = () => {
     try {
       await issueService.returnBook(issueId);
       // Refresh data
-      const response = await memberService.getMemberDetails(memberId);
-      setMemberData(response.data);
+      const issuesRes = await memberService.getMemberIssues(memberId);
+      setIssuedBooks(issuesRes.data);
     } catch (err) {
       setError('Failed to return book.');
     }
@@ -85,8 +88,8 @@ const MemberDashboard = () => {
           </tr>
         </thead>
         <tbody>
-          {memberData.issuedBooks && memberData.issuedBooks.length > 0 ? (
-            memberData.issuedBooks.map(issue => (
+          {issuedBooks && issuedBooks.length > 0 ? (
+            issuedBooks.map(issue => (
               <tr key={issue.issueId}>
                 <td>{issue.book.title}</td>
                 <td>{new Date(issue.issueDate).toLocaleDateString()}</td>

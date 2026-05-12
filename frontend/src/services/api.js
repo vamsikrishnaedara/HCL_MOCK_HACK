@@ -6,7 +6,15 @@ const api = axios.create({
   baseURL: API_BASE_URL,
 });
 
-// ... (rest of interceptor)
+api.interceptors.request.use(config => {
+  const token = localStorage.getItem('auth');
+  if (token) {
+    config.headers.Authorization = `Basic ${token}`;
+  }
+  return config;
+}, error => {
+  return Promise.reject(error);
+});
 
 export const authService = {
   login: (username, password) => {
@@ -45,6 +53,7 @@ export const memberService = {
   getAllMembers: () => api.get('/members'),
   registerMember: (memberData) => api.post('/members', memberData),
   getMemberDetails: (memberId) => api.get(`/members/${memberId}`),
+  getMemberIssues: (memberId) => api.get(`/members/${memberId}/issues`),
 };
 
 export const issueService = {

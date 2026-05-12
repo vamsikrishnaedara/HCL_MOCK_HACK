@@ -60,8 +60,8 @@ const BookManagement = () => {
               <td>{book.title}</td>
               <td>{book.author}</td>
               <td>
-                <span className={`badge bg-${book.availability ? 'success' : 'secondary'}`}>
-                  {book.availability ? 'Available' : 'Issued'}
+                <span className={`badge bg-${book.available ? 'success' : 'secondary'}`}>
+                  {book.available ? 'Available' : 'Issued'}
                 </span>
               </td>
             </tr>

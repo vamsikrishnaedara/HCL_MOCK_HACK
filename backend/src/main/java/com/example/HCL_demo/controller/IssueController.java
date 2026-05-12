@@ -5,6 +5,7 @@ import com.example.HCL_demo.service.LibraryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -13,6 +14,11 @@ public class IssueController {
 
     @Autowired
     private LibraryService libraryService;
+
+    @GetMapping
+    public List<IssueRecord> getAllIssues() {
+        return libraryService.getAllIssues();
+    }
 
     @PostMapping("/issue")
     public IssueRecord issueBook(@RequestBody Map<String, Long> request) {
