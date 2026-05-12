@@ -48,7 +48,7 @@ function App() {
               {user ? (
                 <div className="d-flex align-items-center">
                     <span className="text-light me-3 small">Logged in as: <strong>{user.username}</strong></span>
-                    <Button variant="outline-light" size="sm" onClick={handleLogout} className="px-3 rounded-pill border-opacity-50">
+                    <Button variant="danger" size="sm" onClick={handleLogout} className="px-3 rounded-pill">
                         Logout
                     </Button>
                 </div>
