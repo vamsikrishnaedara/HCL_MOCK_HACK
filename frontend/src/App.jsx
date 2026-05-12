@@ -31,16 +31,15 @@ function App() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              {user?.role === 'LIBRARIAN' && (
+              {user?.role === 'LIBRARIAN' ? (
                 <>
                   <Nav.Link as={Link} to="/librarian">Dashboard</Nav.Link>
                   <Nav.Link as={Link} to="/librarian/books">Collection</Nav.Link>
                   <Nav.Link as={Link} to="/librarian/members">Patrons</Nav.Link>
                 </>
-              )}
-              {user?.role === 'MEMBER' && (
+              ) : (
                 <>
-                  <Nav.Link as={Link} to="/member">My Portal</Nav.Link>
+                  <Nav.Link as={Link} to="/member">Member Portal</Nav.Link>
                   <Nav.Link as={Link} to="/member/catalog">Search Catalog</Nav.Link>
                 </>
               )}
@@ -87,9 +86,9 @@ function App() {
           <Route path="/librarian/books" element={user?.role === 'LIBRARIAN' ? <BookManagement /> : <Navigate to="/login" />} />
           <Route path="/librarian/members" element={user?.role === 'LIBRARIAN' ? <MemberManagement /> : <Navigate to="/login" />} />
 
-          {/* Member Routes */}
-          <Route path="/member" element={user?.role === 'MEMBER' ? <MemberDashboard /> : <Navigate to="/login" />} />
-          <Route path="/member/catalog" element={user?.role === 'MEMBER' ? <BookCatalog /> : <Navigate to="/login" />} />
+          {/* Member Routes (Accessible to all guests) */}
+          <Route path="/member" element={<MemberDashboard />} />
+          <Route path="/member/catalog" element={<BookCatalog />} />
         </Routes>
       </Container>
     </>
