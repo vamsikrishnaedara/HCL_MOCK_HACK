@@ -42,6 +42,9 @@ public class LibraryService {
 
     // Book Management
     public Book addBook(Book book) {
+        if (book.getAvailable() == null) {
+            book.setAvailable(true);
+        }
         return bookRepository.save(book);
     }
 
