@@ -15,6 +15,11 @@ public class MemberController {
     @Autowired
     private LibraryService libraryService;
 
+    @GetMapping
+    public List<Member> getAllMembers() {
+        return libraryService.getAllMembers();
+    }
+
     @PostMapping
     public Member registerMember(@RequestBody Member member) {
         return libraryService.registerMember(member);

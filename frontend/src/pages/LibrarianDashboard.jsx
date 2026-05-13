@@ -32,8 +32,8 @@ const LibrarianDashboard = () => {
         }
 
         setStats({
-          books: booksRes.data.length,
-          members: membersRes.data.length,
+          books: booksRes.data?.length || 0,
+          members: membersRes.data?.length || 0,
           issues: issuesCount
         });
       } catch (err) {

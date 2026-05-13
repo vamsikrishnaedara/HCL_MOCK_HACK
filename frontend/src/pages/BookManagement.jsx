@@ -50,7 +50,8 @@ const BookManagement = () => {
             <th>ID</th>
             <th>Title</th>
             <th>Author</th>
-            <th>Availability</th>
+            <th>Status</th>
+            <th>Current Borrower</th>
           </tr>
         </thead>
         <tbody>
@@ -64,9 +65,16 @@ const BookManagement = () => {
                   {book.available ? 'Available' : 'Issued'}
                 </span>
               </td>
+              <td>
+                {!book.available && book.issues ? (
+                  book.issues.find(i => !i.returnDate)?.member?.name || 'Unknown'
+                ) : (
+                  <span className="text-muted">-</span>
+                )}
+              </td>
             </tr>
           )) : (
-            <tr><td colSpan="4" className="text-center">No books found.</td></tr>
+            <tr><td colSpan="5" className="text-center">No books found.</td></tr>
           )}
         </tbody>
       </Table>

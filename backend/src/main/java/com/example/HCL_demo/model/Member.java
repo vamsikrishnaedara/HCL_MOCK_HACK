@@ -19,4 +19,8 @@ public class Member {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "userId")
     private User user;
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.EAGER)
+    @com.fasterxml.jackson.annotation.JsonIgnoreProperties("member")
+    private java.util.List<IssueRecord> issues;
 }

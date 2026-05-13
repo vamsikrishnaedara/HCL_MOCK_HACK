@@ -22,10 +22,12 @@ public class IssueRecord {
 
     @ManyToOne
     @JoinColumn(name = "book_id")
+    @com.fasterxml.jackson.annotation.JsonIgnoreProperties("issues")
     private Book book;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
+    @com.fasterxml.jackson.annotation.JsonIgnoreProperties("issues")
     private Member member;
 
     private LocalDate issueDate;

@@ -42,6 +42,9 @@ public class LibraryService {
 
     // Book Management
     public Book addBook(Book book) {
+        if (book.getAvailable() == null) {
+            book.setAvailable(true);
+        }
         return bookRepository.save(book);
     }
 
@@ -67,6 +70,10 @@ public class LibraryService {
             // No need to explicitly save user if cascade is ALL, but let's be safe or just let cascade handle it
         }
         return memberRepository.save(member);
+    }
+
+    public List<Member> getAllMembers() {
+        return memberRepository.findAll();
     }
 
     public Optional<Member> getMemberDetails(Long memberId) {
